@@ -66,7 +66,18 @@ public class ObtenerDatos {
             return null;
         }
 
-        //[2] PRÁCTICA 3. Punto 1.a
+        //[2] PRÁCTICA 3. Punto 1.a 
+        
+       // revisarrrrr
+        /**Comando SELECT: 
+         * Este comando permite la selección de fichero dedicado (DF) o de un fichero elemental (EF).
+         * 
+         *   Primer octecto: 0x00 "CLA"
+         *   Segundo octecto: 0xA4 "INS"
+         *   Tercer octecto: 0x04 "P1" -> Selección de un fichero dedicado (Nombre)
+         *   Cuarto octecto: 0x00 "P2"
+         *   Quinto octecto: 0x0b "LC" o longitud de los datos en bytes
+        */
         command = new byte[]{(byte) 0x00, (byte) 0xA4, (byte) 0x00, (byte) 0x00, (byte) 0x02, (byte) 0x50, (byte) 0x15};
         r = ch.transmit(new CommandAPDU(command));
 
