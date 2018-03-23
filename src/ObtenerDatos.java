@@ -59,6 +59,17 @@ public class ObtenerDatos {
         String completName = null;
 
         //[1] PRÁCTICA 3. Punto 1.a
+ 
+        /**Comando SELECT: 
+         * Este comando permite la selección de fichero dedicado (DF) o de un fichero elemental (EF).
+         * 
+         *   Primer octecto: 0x00 "CLA"
+         *   Segundo octecto: 0xA4 "INS"
+         *   Tercer octecto: 0x04 "P1" (DF) Nombre
+         *   Cuarto octecto: 0x00 "P2"
+         *   Quinto octecto: 0x0b "LC"  longitud en bytes
+        */
+        
         byte[] command = new byte[]{(byte) 0x00, (byte) 0xa4, (byte) 0x04, (byte) 0x00, (byte) 0x0b, (byte) 0x4D, (byte) 0x61, (byte) 0x73, (byte) 0x74, (byte) 0x65, (byte) 0x72, (byte) 0x2E, (byte) 0x46, (byte) 0x69, (byte) 0x6C, (byte) 0x65};
         ResponseAPDU r = ch.transmit(new CommandAPDU(command));
         if ((byte) r.getSW() != (byte) 0x9000) {
@@ -68,16 +79,15 @@ public class ObtenerDatos {
 
         //[2] PRÁCTICA 3. Punto 1.a 
         
-       // revisarrrrr
-        /**Comando SELECT: 
-         * Este comando permite la selección de fichero dedicado (DF) o de un fichero elemental (EF).
-         * 
-         *   Primer octecto: 0x00 "CLA"
-         *   Segundo octecto: 0xA4 "INS"
-         *   Tercer octecto: 0x04 "P1" -> Selección de un fichero dedicado (Nombre)
-         *   Cuarto octecto: 0x00 "P2"
-         *   Quinto octecto: 0x0b "LC" o longitud de los datos en bytes
-        */
+         /**
+         * Comando: Select
+         *  - Primer octecto: 0x00 "CLA"
+         *  - Segundo octecto: 0xA4 "INS"
+         *  - Tercer octecto: 0x00 "P1" -> Selecciona DF o EF por Id (data field = id)
+         *  - Cuarto octecto: 0x00 "P2"
+         *  - Quinto octecto: 0x02 "LC" longitud en bytes
+         **/
+              
         command = new byte[]{(byte) 0x00, (byte) 0xA4, (byte) 0x00, (byte) 0x00, (byte) 0x02, (byte) 0x50, (byte) 0x15};
         r = ch.transmit(new CommandAPDU(command));
 
@@ -87,6 +97,17 @@ public class ObtenerDatos {
         }
 
         //[3] PRÁCTICA 3. Punto 1.a
+        
+         /**
+         * Comando: Select
+         *  - 1º octecto: 0x00 "CLA"
+         *  - 2º octecto: 0xA4 "INS"
+         *  - 3º octecto: 0x00 "P1" -> Selecciona DF o EF por Id (data field = id)
+         *  - 4º octecto: 0x00 "P2"
+         *  - 5º octecto: 0x02 "LC" o longitud de los datos en bytes
+         *  - Resto de cotectos: "Datos de aceurdo a P1-P2"
+         * 
+         */
         command = new byte[]{(byte) 0x00, (byte) 0xA4, (byte) 0x00, (byte) 0x00, (byte) 0x02, (byte) 0x60, (byte) 0x04};
         r = ch.transmit(new CommandAPDU(command));
 
