@@ -65,9 +65,9 @@ public class ObtenerDatos {
          * 
          *   Primer octecto: 0x00 "CLA"
          *   Segundo octecto: 0xA4 "INS"
-         *   Tercer octecto: 0x04 "P1" (DF) Nombre
+         *   Tercer octecto: 0x04 "P1" ((DF) Nombre)
          *   Cuarto octecto: 0x00 "P2"
-         *   Quinto octecto: 0x0b "LC"  longitud en bytes
+         *   Quinto octecto: 0x0b "LC"  (longitud en bytes)
         */
         
         byte[] command = new byte[]{(byte) 0x00, (byte) 0xa4, (byte) 0x04, (byte) 0x00, (byte) 0x0b, (byte) 0x4D, (byte) 0x61, (byte) 0x73, (byte) 0x74, (byte) 0x65, (byte) 0x72, (byte) 0x2E, (byte) 0x46, (byte) 0x69, (byte) 0x6C, (byte) 0x65};
@@ -79,13 +79,13 @@ public class ObtenerDatos {
 
         //[2] PRÁCTICA 3. Punto 1.a 
         
-         /**
-         * Comando: Select
-         *  - Primer octecto: 0x00 "CLA"
-         *  - Segundo octecto: 0xA4 "INS"
-         *  - Tercer octecto: 0x00 "P1" -> Selecciona DF o EF por Id (data field = id)
-         *  - Cuarto octecto: 0x00 "P2"
-         *  - Quinto octecto: 0x02 "LC" longitud en bytes
+         /** Comando SELECT:
+          *
+         *  Primer octecto: 0x00 "CLA"
+         *  Segundo octecto: 0xA4 "INS"
+         *  Tercer octecto: 0x00 "P1" (DF o EF por Id (data field = id))
+         *  Cuarto octecto: 0x00 "P2"
+         *  Quinto octecto: 0x02 "LC" (longitud en bytes)
          **/
               
         command = new byte[]{(byte) 0x00, (byte) 0xA4, (byte) 0x00, (byte) 0x00, (byte) 0x02, (byte) 0x50, (byte) 0x15};
@@ -98,16 +98,14 @@ public class ObtenerDatos {
 
         //[3] PRÁCTICA 3. Punto 1.a
         
-         /**
-         * Comando: Select
-         *  - 1º octecto: 0x00 "CLA"
-         *  - 2º octecto: 0xA4 "INS"
-         *  - 3º octecto: 0x00 "P1" -> Selecciona DF o EF por Id (data field = id)
-         *  - 4º octecto: 0x00 "P2"
-         *  - 5º octecto: 0x02 "LC" o longitud de los datos en bytes
-         *  - Resto de cotectos: "Datos de aceurdo a P1-P2"
-         * 
-         */
+         /** Comando SELECT: 
+          * 
+         *  Primer octecto: 0x00 "CLA"
+         *  Segundo octecto: 0xA4 "INS"
+         *  Tercer octecto: 0x00 "P1" (DF o EF por Id (data field = id))
+         *  Cuarto octecto: 0x00 "P2"
+         *  Quinto octecto: 0x02 "LC" (longitud en bytes)
+         **/
         command = new byte[]{(byte) 0x00, (byte) 0xA4, (byte) 0x00, (byte) 0x00, (byte) 0x02, (byte) 0x60, (byte) 0x04};
         r = ch.transmit(new CommandAPDU(command));
 
@@ -125,16 +123,21 @@ public class ObtenerDatos {
 
         do {
              //[4] PRÁCTICA 3. Punto 1.b
-            final byte CLA = (byte) 0x00;//Buscar qué valor poner aquí (0xFF no es el correcto)
-            final byte INS = (byte) 0xB0;//Buscar qué valor poner aquí (0xFF no es el correcto)
-            final byte LE = (byte) 0xFF;// Identificar qué significa este valor
+             /**Los siguientes valores hacen referencia al comando READ BINARY
+              * 
+              */
+             
+            final byte CLA = (byte) 0x00;// El valor 0x0X puede ir desde 0 a F en hexadecimal (0 hasta 15 en decimal).
+            final byte INS = (byte) 0xB0;// Especifíca que el tipo de comando es un READ BINARY.
+            final byte LE = (byte) 0xFF;//  LE: Número de bytes a leer (si está a 0, lee hasta 256).
 
             //[4] PRÁCTICA 3. Punto 1.b
-            command = new byte[]{CLA, INS, (byte) bloque/*P1*/, (byte) 0x00/*P2*/, LE};//Identificar qué hacen P1 y P2
+            command = new byte[]{CLA, INS, (byte) bloque/*P1*/, (byte) 0x00/*P2*/, LE};//Realiza una lectura de todos los bytes excepto el rango P1 y P2, en este caso están a cero. 
             r = ch.transmit(new CommandAPDU(command));
 
-            //System.out.println("ACCESO DNIe: Response SW1=" + String.format("%X", r.getSW1()) + " SW2=" + String.format("%X", r.getSW2()));
-
+            System.out.println("ACCESO DNIe: Response SW1=" + String.format("%X", r.getSW1()) + " SW2=" + String.format("%X", r.getSW2()));
+            // El SW1=90 significa comando correcto OK
+            
             if ((byte) r.getSW() == (byte) 0x9000) {
                 r2 = r.getData();
 
@@ -237,6 +240,12 @@ public class ObtenerDatos {
      * @return 
      */
     private Usuario leerDatosUsuario(byte[] datos) {
+        
+        
+        
+        
+        
+        
        return null;
     }
 }
