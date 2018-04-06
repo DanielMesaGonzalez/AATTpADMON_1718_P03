@@ -240,11 +240,27 @@ public class ObtenerDatos {
      * @return 
      */
     private Usuario leerDatosUsuario(byte[] datos) {
+        /*
+        byte[] nombre=null;
+        int cont=0;
+        int tam=0;
+        
+        TODO: Implementar para introducir OID DNI(85,4,5) y APELLIDOS(85,4,3) antes de identificar tipo String-->tam
+        
+        //Se extrae bytes del nombre y apellidos despues de encontrar TIPO UTF8
+        
+        for(int i=0;i<datos.length;i++){
+            
+            if((int)datos[i]==12){
+            tam= (int)datos[i+1];
+            i=i+2;
+            }else if(cont<=tam)
+                nombre[cont]=datos[i];
+                cont=1+cont;
+        }
         
         
-        
-        
-        
+        */
         
        return null;
     }
