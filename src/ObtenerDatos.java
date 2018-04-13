@@ -240,27 +240,48 @@ public class ObtenerDatos {
      * @return 
      */
     private Usuario leerDatosUsuario(byte[] datos) {
-        /*
-        byte[] nombre=null;
+        
+
+        byte[] dni= new byte[9];
         int cont=0;
         int tam=0;
-        
-        TODO: Implementar para introducir OID DNI(85,4,5) y APELLIDOS(85,4,3) antes de identificar tipo String-->tam
+        byte[] nombre= null;
+        boolean pos=false;
+        //TODO: Implementar para introducir OID DNI(85,4,5) y APELLIDOS(85,4,3) antes de identificar tipo String-->tam
         
         //Se extrae bytes del nombre y apellidos despues de encontrar TIPO UTF8
         
         for(int i=0;i<datos.length;i++){
+        
             
-            if((int)datos[i]==12){
-            tam= (int)datos[i+1];
-            i=i+2;
-            }else if(cont<=tam)
+            
+            if(datos[i]==6 && datos[i+2]==85 && datos[i+3]==4 && datos[i+4]==5){
+            i=i+7;//Salto el tamaño del DNI y me coloco en la primera letra.
+            pos=true;
+            }else if(cont<=9 && pos==true){
+            dni[i]=datos[i];
+            cont=1+cont;
+            }else{
+            
+            if(datos[i]==6 && datos[i+2]==85 && datos[i+3]==4 && datos[i+4]==3){
+            i=i+5;//Me coloco en la posicion de UTF8Stringtype
+            pos=false;
+            }else
+            
+            if(datos[i]==12 && pos==false){
+            tam= (int)datos[i+1];//El siguiente byte indica el tamaño del nombre, lo guardamos.
+            nombre= new byte[tam];//Inicializamos con ese tamaño.
+            i=i+2;// y ya nos colocamos en la primera letra del nombre.
+            cont=0;
+            }else if(cont<=tam)//Recorremos hasta los bytes que hemos recogido en la variable tam.
                 nombre[cont]=datos[i];
                 cont=1+cont;
-        }
+            }
+            
+            }
         
         
-        */
+        System.out.println(dni.toString());
         
        return null;
     }
