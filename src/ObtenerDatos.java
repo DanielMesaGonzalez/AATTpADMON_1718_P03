@@ -244,45 +244,68 @@ public class ObtenerDatos {
 
         byte[] dni= new byte[9];
         int cont=0;
-        int tam=0;
+        int tam=-1;
         byte[] nombre= null;
         boolean pos=false;
+        int i=0,j=0;
+        String DNI="",NOMBRE="",n="",a1="",a2="";
         //TODO: Implementar para introducir OID DNI(85,4,5) y APELLIDOS(85,4,3) antes de identificar tipo String-->tam
         
         //Se extrae bytes del nombre y apellidos despues de encontrar TIPO UTF8
         
-        for(int i=0;i<datos.length;i++){
+        for(i=0;i<datos.length;i++){
         
-            
             
             if(datos[i]==6 && datos[i+2]==85 && datos[i+3]==4 && datos[i+4]==5){
-            i=i+7;//Salto el tamaño del DNI y me coloco en la primera letra.
+            i=i+6;//Salto el tamaño del DNI y me coloco en la primera letra.
             pos=true;
-            }else if(cont<=9 && pos==true){
-            dni[i]=datos[i];
-            cont=1+cont;
-            }else{
+            }else if(cont<9 && pos==true){
+            dni[cont]=datos[i];
+            cont++;
+            }else if (cont==9){
+                cont=0;pos=false;
+                j=i;
+                i=datos.length;
+        DNI= new String(dni);
+            }
+        
+        }
+                
+            for(j=0;j<datos.length;j++){
+        
+             
+            if(datos[j]==6 && datos[j+2]==85 && datos[j+3]==4 && datos[j+4]==3){
+            j=j+5;//Me coloco en la posicion de UTF8Stringtype
+            pos=true;
             
-            if(datos[i]==6 && datos[i+2]==85 && datos[i+3]==4 && datos[i+4]==3){
-            i=i+5;//Me coloco en la posicion de UTF8Stringtype
-            pos=false;
-            }else
+            }if(datos[j]==12 && pos==true){
             
-            if(datos[i]==12 && pos==false){
-            tam= (int)datos[i+1];//El siguiente byte indica el tamaño del nombre, lo guardamos.
+            tam= (int)datos[j+1];//El siguiente byte indica el tamaño del nombre, lo guardamos.
             nombre= new byte[tam];//Inicializamos con ese tamaño.
-            i=i+2;// y ya nos colocamos en la primera letra del nombre.
-            cont=0;
-            }else if(cont<=tam)//Recorremos hasta los bytes que hemos recogido en la variable tam.
-                nombre[cont]=datos[i];
-                cont=1+cont;
-            }
+            j=j+2;// y ya nos colocamos en la primera letra del nombre.
+            pos=false;
+            }if(cont<tam && pos==false){//Recorremos hasta los bytes que hemos recogido en la variable tam.
+                nombre[cont]=datos[j];
+                cont++;
+            }else if(cont==tam){
             
+            j=datos.length;
+            NOMBRE=new String(nombre);
             }
+        }
         
+        String[] nomb,apellidos;
+        nomb=NOMBRE.split(",");apellidos=NOMBRE.split(",");
+        nomb=nomb[1].split("\\(AUTENTICACIÓN\\)");
+        n=nomb[0];
         
-        System.out.println(dni.toString());
+        apellidos=apellidos[0].split(" ");
+        a1=apellidos[0];
+        a2=apellidos[1];
         
-       return null;
+        Usuario user= new Usuario(n, a1, a2,DNI);
+        
+       return user;
     }
+    
 }
