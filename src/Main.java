@@ -26,7 +26,8 @@ public class Main {
         Usuario user = od.LeerNIF();
         if(user!=null)
             System.out.println("usuario: "+user.toString());
-        
+            String nickname=user.getNombre().substring(0,1)+ user.getApellido1()+user.getApellido2().substring(0,1);
+            System.out.println("Tu nickname será:"+nickname+"");
         //TAREA 3. AUTENTICAR EL CLIENTE CON EL SERVIDOR
         
     }
